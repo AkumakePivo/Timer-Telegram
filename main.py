@@ -1,7 +1,5 @@
 import asyncio
 import threading
-import pystray
-from PIL import Image
 from telegram import (
     Update,
     ReplyKeyboardMarkup,
@@ -219,63 +217,3 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Удалить сообщение
     elif query.data == "delete_message":
         await query.message.delete()
-
-
-
-# ==========================
-# СИСТЕМНЫЙ ТРЕЙ
-# ==========================
-
-def exit_app(icon, item):
-    global timer_running, timer_task, bot_app
-    timer_running = False
-    if timer_task:
-        timer_task.cancel()
-        timer_task = None
-    icon.stop()
-    if bot_app:
-        bot_app.stop_running()
-
-
-def tray_thread():
-    # Создаём простой значок без внешнего файла
-    image = Image.new("RGB", (64, 64), "white")
-    icon = pystray.Icon(
-        "Telegram Timer Bot",
-        image,
-        "Telegram Timer Bot",
-        menu=pystray.Menu(
-            pystray.MenuItem("Выход", exit_app)
-        )
-    )
-    icon.run()
-
-
-bot_app = None
-
-
-def main():
-    global bot_app
-    app = Application.builder().token(TOKEN).build()
-    bot_app = app
-
-    app.add_handler(CommandHandler("start", start_command))
-
-    app.add_handler(
-        MessageHandler(
-            filters.TEXT & ~filters.COMMAND,
-            keyboard_handler,
-        )
-    )
-
-    app.add_handler(
-        CallbackQueryHandler(button_handler)
-    )
-
-    print("Бот запущен в системном трее...")
-    threading.Thread(target=tray_thread, daemon=True).start()
-    app.run_polling()
-
-
-if __name__ == "__main__":
-    main()
