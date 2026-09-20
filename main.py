@@ -1,5 +1,4 @@
 import asyncio
-import threading
 from telegram import (
     Update,
     ReplyKeyboardMarkup,
@@ -18,7 +17,9 @@ from telegram.ext import (
 # ==========================
 # ВСТАВЬ СВОЙ ТОКЕН СЮДА
 # ==========================
-TOKEN = "8888153763:AAG5RtzNWgkpEkOBNiZRju2r6WiVa4NewsU"
+import os
+
+TOKEN = os.environ["8888153763:AAG5RtzNWgkpEkOBNiZRju2r6WiVa4NewsU"]
 
 # Интервал по умолчанию (минуты)
 DEFAULT_MINUTES = 9
@@ -217,3 +218,16 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Удалить сообщение
     elif query.data == "delete_message":
         await query.message.delete()
+
+def main():
+    application = Application.builder().token(TOKEN).build()
+
+    application.add_handler(CommandHandler("start", start_command))
+    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, keyboard_handler))
+
+    application.run_polling(drop_pending_updates=True)
+
+
+if __name__ == "__main__":
+    main()
