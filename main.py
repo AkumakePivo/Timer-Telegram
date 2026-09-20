@@ -1,4 +1,5 @@
 import asyncio
+BOT_TOKEN = 8888153763:AAG5RtzNWgkpEkOBNiZRju2r6WiVa4NewsU
 from telegram import (
     Update,
     ReplyKeyboardMarkup,
@@ -19,7 +20,7 @@ from telegram.ext import (
 # ==========================
 import os
 
-TOKEN = os.environ["8888153763:AAG5RtzNWgkpEkOBNiZRju2r6WiVa4NewsU"]
+TOKEN = os.environ["BOT_TOKEN"]
 
 # Интервал по умолчанию (минуты)
 DEFAULT_MINUTES = 9
