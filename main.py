@@ -1,5 +1,4 @@
 import asyncio
-BOT_TOKEN = 8888153763:AAG5RtzNWgkpEkOBNiZRju2r6WiVa4NewsU
 from telegram import (
     Update,
     ReplyKeyboardMarkup,
